@@ -20,11 +20,20 @@
         <img
           class="github__logo"
           src="https://material.angular.io/assets/img/homepage/github-circle-white-transparent.svg"
-          alt=""
+          alt="GitHub"
         />
         GitHub
       </button>
     </a>
   </mat-toolbar>
 </p>
+
+<div class="board">
+  <div class="row" *ngFor="let row of [].constructor(rows); let i = index">
+    <div class="col" *ngFor="let col of [].constructor(cols); let j = index">
+    
+    </div>
+  </div>
+</div>
+
 <router-outlet></router-outlet>

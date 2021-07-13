@@ -19,3 +19,39 @@
 .header__button {
   margin: 0 0.5em;
 }
+
+$tileBorder: #afd8f8;
+
+@mixin flexCenter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.board {
+  user-select: none;
+  cursor: default;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  width: fit-content;
+  height: fit-content;
+  border-top: 1px solid $tileBorder;
+  border-left: 1px solid $tileBorder;
+  .row {
+    display: flex;
+    height: 25px;
+    min-height: 25px;
+    width: 100%;
+    .col {
+      background: #fafafa;
+      user-select: none;
+      @include flexCenter();
+      width: 25px;
+      min-width: 25px;
+      height: 100%;
+      border-right: 1px solid $tileBorder;
+      border-bottom: 1px solid $tileBorder;
+    }
+  }
+}
