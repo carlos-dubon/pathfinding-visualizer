@@ -86,3 +86,34 @@ $tileBorder: #afd8f8;
     background: #3d5af1;
   }
 }
+
+.start {
+  position: relative;
+  &::after {
+    //position: absolute;
+    z-index: 3;
+    content: "";
+    width: 18px;
+    height: 18px;
+    position: relative;
+    background: url(./../assets/nodes/start.svg);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+}
+
+.target {
+  position: relative;
+  &::after {
+    content: "";
+    width: 18px;
+    height: 18px;
+    position: absolute;
+    z-index: 3;
+    background: url(./../assets/nodes/target.svg);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+}

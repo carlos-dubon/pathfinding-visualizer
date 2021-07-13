@@ -10,4 +10,6 @@ export class Tile {
 export enum TileType {
   default = 1,
   wall,
+  start,
+  target,
 }

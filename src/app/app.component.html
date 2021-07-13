@@ -12,7 +12,14 @@
       Generate maze
     </button>
     <button mat-raised-button class="header__button">Clear board</button>
-    <button mat-raised-button class="header__button">Clear walls</button>
+    <button
+      [disabled]="!wallsPresent()"
+      mat-raised-button
+      class="header__button"
+      (click)="clearWalls()"
+    >
+      Clear walls
+    </button>
     <button mat-raised-button class="header__button">Clear path</button>
     <span class="spacer"></span>
     <a href="https://github.com" target="_blank">
@@ -40,7 +47,12 @@
       *ngFor="let col of board[i]; let j = index"
       (mouseenter)="mouseEnterEvents(col)"
       (mousedown)="mouseDownEvents(col)"
-      [ngClass]="{ wall: col.type == 2 }"
+      (mouseleave)="mouseLeaveEvents(col)"
+      [ngClass]="{
+        wall: col.type == 2,
+        start: col.type == 3,
+        target: col.type == 4
+      }"
     ></div>
   </div>
 </div>
