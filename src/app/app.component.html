@@ -1,1 +1,30 @@
+<p class="header__toolbar">
+  <mat-toolbar color="primary">
+    <span class="header__title">Pathfinding Visualizer</span>
+    <button mat-raised-button color="accent" class="header__button">
+      Visualize Dijkstra's!
+    </button>
+    <button
+      mat-raised-button
+      class="header__button"
+      matTooltip="Uses Prim’s algorithm"
+    >
+      Generate maze
+    </button>
+    <button mat-raised-button class="header__button">Clear board</button>
+    <button mat-raised-button class="header__button">Clear walls</button>
+    <button mat-raised-button class="header__button">Clear path</button>
+    <span class="spacer"></span>
+    <a href="https://github.com" target="_blank">
+      <button mat-button matTooltip="Checkout the GitHub repo">
+        <img
+          class="github__logo"
+          src="https://material.angular.io/assets/img/homepage/github-circle-white-transparent.svg"
+          alt=""
+        />
+        GitHub
+      </button>
+    </a>
+  </mat-toolbar>
+</p>
 <router-outlet></router-outlet>
