@@ -13,6 +13,9 @@ export class AppComponent {
   public startNodeSelected: boolean = false;
   public targetNodeSelected: boolean = false;
 
+  // Keep track of the last node
+  public lastNode: Tile | null = null;
+
   // Amt of rows and cols the board should have
   public rows: number = 16;
   public cols: number = 45;
@@ -96,6 +99,7 @@ export class AppComponent {
   }
 
   public mouseLeaveEvents(col: Tile): void {
+    this.lastNode = col;
     this.removeStartNodeOnDrag(col);
     this.removeTargetNodeOnDrag(col);
   }
@@ -122,6 +126,12 @@ export class AppComponent {
         col.type = TileType.start;
       } else if (col.type === TileType.wall) {
         col.type = TileType.start;
+      } else if (col.type === TileType.target) {
+        if (this.lastNode) {
+          // Prevents overlap
+          this.lastNode.type = TileType.start;
+          col.type = TileType.target;
+        }
       }
       this.startNodeSelected = false;
     }
@@ -141,6 +151,11 @@ export class AppComponent {
         col.type = TileType.target;
       } else if (col.type === TileType.wall) {
         col.type = TileType.target;
+      } else if (col.type === TileType.start) {
+        if (this.lastNode) {
+          this.lastNode.type = TileType.target;
+          col.type = TileType.start;
+        }
       }
       this.targetNodeSelected = false;
     }
