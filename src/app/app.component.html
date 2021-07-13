@@ -28,11 +28,9 @@
   </mat-toolbar>
 </p>
 
-<div class="board">
-  <div class="row" *ngFor="let row of [].constructor(rows); let i = index">
-    <div class="col" *ngFor="let col of [].constructor(cols); let j = index">
-    
-    </div>
+<div #boardEl class="board">
+  <div class="row" *ngFor="let row of board; let i = index">
+    <div class="col" *ngFor="let col of board[i]; let j = index"></div>
   </div>
 </div>
 
