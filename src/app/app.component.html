@@ -28,9 +28,20 @@
   </mat-toolbar>
 </p>
 
-<div #boardEl class="board">
+<div
+  #boardEl
+  class="board"
+  (mousedown)="setMouseDownValue(true)"
+  (mouseup)="setMouseDownValue(false)"
+>
   <div class="row" *ngFor="let row of board; let i = index">
-    <div class="col" *ngFor="let col of board[i]; let j = index"></div>
+    <div
+      class="col"
+      *ngFor="let col of board[i]; let j = index"
+      (mouseenter)="mouseEnterEvents(col)"
+      (mousedown)="mouseDownEvents(col)"
+      [ngClass]="{ wall: col.type == 2 }"
+    ></div>
   </div>
 </div>
 
