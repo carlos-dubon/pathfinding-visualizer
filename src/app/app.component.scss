@@ -1,3 +1,9 @@
+@mixin flexCenter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .header__toolbar {
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
@@ -20,12 +26,31 @@
   margin: 0 0.5em;
 }
 
+.legend {
+  margin: 2em;
+  @include flexCenter();
+  gap: 2em;
+  width: 100%;
+  .item {
+    @include flexCenter();
+    img {
+      margin-right: 0.35em;
+    }
+    p {
+      color: #0E153A;
+      font-size: 16px;
+      font-weight: 400;
+      margin: 0;
+    }
+  }
+}
+
 $tileBorder: #afd8f8;
 
-@mixin flexCenter {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.board__container {
+  width: 100%;
+  height: 100%;
+  @include flexCenter();
 }
 
 .board {

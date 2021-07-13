@@ -34,26 +34,53 @@
     </a>
   </mat-toolbar>
 </p>
-
-<div
-  #boardEl
-  class="board"
-  (mousedown)="setMouseDownValue(true)"
-  (mouseup)="setMouseDownValue(false)"
->
-  <div class="row" *ngFor="let row of board; let i = index">
-    <div
-      class="col"
-      *ngFor="let col of board[i]; let j = index"
-      (mouseenter)="mouseEnterEvents(col)"
-      (mousedown)="mouseDownEvents(col)"
-      (mouseleave)="mouseLeaveEvents(col)"
-      [ngClass]="{
-        wall: col.type == 2,
-        start: col.type == 3,
-        target: col.type == 4
-      }"
-    ></div>
+<div class="legend">
+  <div class="item">
+    <img src="assets/nodes/start.svg" alt="Start node" />
+    <p>Start node</p>
+  </div>
+  <div class="item">
+    <img src="assets/nodes/target.svg" alt="Target node" />
+    <p>Target node</p>
+  </div>
+  <div class="item">
+    <img src="assets/nodes/unvisited.svg" alt="Target node" />
+    <p>Unvisited node</p>
+  </div>
+  <div class="item">
+    <img src="assets/nodes/visited.svg" alt="Target node" />
+    <p>Visited node</p>
+  </div>
+  <div class="item">
+    <img src="assets/nodes/wall.svg" alt="Target node" />
+    <p>Wall node</p>
+  </div>
+  <div class="item">
+    <img src="assets/nodes/shortest-path.svg" alt="Target node" />
+    <p>Shortest path</p>
+  </div>
+</div>
+<div class="board__container">
+  <div
+    #boardEl
+    class="board"
+    (mousedown)="setMouseDownValue(true)"
+    (mouseup)="setMouseDownValue(false)"
+  >
+    <div class="row" *ngFor="let row of board; let i = index">
+      <div
+        class="col"
+        *ngFor="let col of board[i]; let j = index"
+        (mouseenter)="mouseEnterEvents(col)"
+        (mousedown)="mouseDownEvents(col)"
+        (mouseleave)="mouseLeaveEvents(col)"
+        [ngClass]="{
+          wall: col.type == 2,
+          start: col.type == 3,
+          target: col.type == 4
+        }"
+      ></div>
+    </div>
   </div>
 </div>
 
