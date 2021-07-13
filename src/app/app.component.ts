@@ -17,8 +17,12 @@ export class AppComponent {
   public lastNode: Tile | null = null;
 
   // Amt of rows and cols the board should have
-  public rows: number = 16;
-  public cols: number = 45;
+  public rows: number;
+  public cols: number;
+
+  // Where the start and target node should start
+  public startRow: number;
+  public startCol: number;
 
   // Board
   public board: Array<Array<Tile>>;
@@ -26,7 +30,24 @@ export class AppComponent {
   // DOM Board element ref
   @ViewChild('boardEl') boardEl: ElementRef<Element>;
 
-  constructor() {}
+  constructor() {
+    this.setBoardSize();
+  }
+
+  private setBoardSize(): void {
+    // Note that the toolbar height and legend height can change
+    const toolbarHeight: number = 142;
+    const windowHeight: number = window.innerHeight - toolbarHeight;
+    const windowWidth: number = window.innerWidth;
+
+    const availableRows = Math.floor(windowHeight / 25) - 1;
+    const availableCols = Math.floor(windowWidth / 25) - 2;
+
+    this.rows = availableRows;
+    this.cols = availableCols;
+    this.startRow = Math.floor(this.rows / 2);
+    this.startCol = Math.floor(this.cols / 12);
+  }
 
   public ngOnInit(): void {
     this.generateBoard();
@@ -49,10 +70,10 @@ export class AppComponent {
         this.board[i][j] = new Tile(TileType.default);
 
         // Placing the start and target nodes
-        if (i == 4 && j == 1) {
+        if (i == this.startRow && j == this.startCol * 2) {
           this.board[i][j].type = TileType.start;
         }
-        if (i == 4 && j == 15) {
+        if (i == this.startRow && j == this.startCol * 10) {
           this.board[i][j].type = TileType.target;
         }
       }
