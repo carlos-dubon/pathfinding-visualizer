@@ -1,7 +1,12 @@
 <p class="header__toolbar">
   <mat-toolbar color="primary">
     <span class="header__title">Pathfinding Visualizer</span>
-    <button mat-raised-button color="accent" class="header__button">
+    <button
+      mat-raised-button
+      color="accent"
+      class="header__button"
+      (click)="start()"
+    >
       Visualize Dijkstra's!
     </button>
     <button
@@ -22,6 +27,18 @@
     </button>
     <button mat-raised-button class="header__button">Clear path</button>
     <span class="spacer"></span>
+    <button
+      matTooltip="Select the speed of the algorithm"
+      mat-button
+      [matMenuTriggerFor]="menu"
+    >
+      Speed: Normal <mat-icon>arrow_drop_down</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item>Slow</button>
+      <button mat-menu-item>Normal</button>
+      <button mat-menu-item>Fast</button>
+    </mat-menu>
     <a href="https://github.com" target="_blank">
       <button mat-button matTooltip="Checkout the GitHub repo">
         <img
@@ -34,52 +51,43 @@
     </a>
   </mat-toolbar>
 </p>
-<div class="legend">
-  <div class="item">
-    <img src="assets/nodes/start.svg" alt="Start node" />
-    <p>Start node</p>
-  </div>
-  <div class="item">
-    <img src="assets/nodes/target.svg" alt="Target node" />
-    <p>Target node</p>
-  </div>
-  <div class="item">
-    <img src="assets/nodes/unvisited.svg" alt="Unvisited node" />
-    <p>Unvisited node</p>
-  </div>
-  <div class="item">
-    <img src="assets/nodes/visited.svg" alt="Visited node" />
-    <p>Visited node</p>
-  </div>
-  <div class="item">
-    <img src="assets/nodes/wall.svg" alt="Wall node" />
-    <p>Wall node</p>
-  </div>
-  <div class="item">
-    <img src="assets/nodes/shortest-path.svg" alt="Shortest path" />
-    <p>Shortest path</p>
-  </div>
-</div>
-<div class="board__container">
-  <div
-    #boardEl
-    class="board"
-    (mousedown)="setMouseDownValue(true)"
-    (mouseup)="setMouseDownValue(false)"
-  >
-    <div class="row" *ngFor="let row of board; let i = index">
+<div class="main__wrapper">
+  <div class="main">
+    <mat-card class="board__container">
       <div
-        class="col"
-        *ngFor="let col of board[i]; let j = index"
-        (mouseenter)="mouseEnterEvents(col)"
-        (mousedown)="mouseDownEvents(col)"
-        (mouseleave)="mouseLeaveEvents(col)"
-        [ngClass]="{
-          wall: col.type == 2,
-          start: col.type == 3,
-          target: col.type == 4
-        }"
-      ></div>
+        #boardEl
+        class="board"
+        (mousedown)="setMouseDownValue(true)"
+        (mouseup)="setMouseDownValue(false)"
+      >
+        <div class="row" *ngFor="let row of board; let i = index">
+          <div
+            class="col"
+            *ngFor="let col of board[i]; let j = index"
+            (mouseenter)="mouseEnterEvents(col)"
+            (mousedown)="mouseDownEvents(col)"
+            (mouseleave)="mouseLeaveEvents(col)"
+            [ngClass]="{
+              wall: col.type == 2,
+              start: col.type == 3,
+              target: col.type == 4,
+              visited: col.state == 1
+            }"
+          ></div>
+        </div>
+      </div>
+    </mat-card>
+    <div class="info">
+      <mat-card class="card">
+        <p>Visited nodes</p>
+        <h1>0</h1>
+        <mat-progress-bar mode="determinate" value="0"></mat-progress-bar>
+      </mat-card>
+      <mat-card class="card">
+        <p>Shortest path</p>
+        <h1>0</h1>
+        <mat-progress-bar mode="determinate" value="0"></mat-progress-bar>
+      </mat-card>
     </div>
   </div>
 </div>

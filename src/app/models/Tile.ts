@@ -1,9 +1,15 @@
 export class Tile {
+  public i: number;
+  public j: number;
   public DOMElement?: Element;
   public type: TileType;
-  constructor(type: TileType, DOMElement?: Element) {
+  public state: TileState;
+  constructor(i: number, j: number, type: TileType, DOMElement?: Element) {
+    this.i = i;
+    this.j = j;
     this.type = type;
     this.DOMElement = DOMElement;
+    this.state = TileState.unvisited;
   }
 }
 
@@ -12,4 +18,9 @@ export enum TileType {
   wall,
   start,
   target,
+}
+
+export enum TileState {
+  unvisited,
+  visited,
 }

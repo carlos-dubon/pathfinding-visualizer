@@ -1,4 +1,4 @@
-import { Tile, TileType } from './models/Tile';
+import { Tile, TileState, TileType } from './models/Tile';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 
 @Component({
@@ -27,29 +27,34 @@ export class AppComponent {
   // Board
   public board: Array<Array<Tile>>;
 
+  public targetFound: boolean = false;
+
   // DOM Board element ref
   @ViewChild('boardEl') boardEl: ElementRef<Element>;
 
-  constructor() {
-    this.setBoardSize();
-  }
+  constructor() {}
 
   private setBoardSize(): void {
-    // Note that the toolbar height and legend height can change
-    const toolbarHeight: number = 142;
+    // Note that the toolbar height and panels width can change
+    const toolbarHeight: number = 90;
+    const informationPanel: number = 410;
     const windowHeight: number = window.innerHeight - toolbarHeight;
-    const windowWidth: number = window.innerWidth;
+    const windowWidth: number = window.innerWidth - informationPanel;
 
-    const availableRows = Math.floor(windowHeight / 25) - 1;
+    const availableRows = Math.floor(windowHeight / 25) - 2;
     const availableCols = Math.floor(windowWidth / 25) - 2;
-
     this.rows = availableRows;
     this.cols = availableCols;
+
+    // this.rows = 20;
+    //this.cols = 40;
+
     this.startRow = Math.floor(this.rows / 2);
-    this.startCol = Math.floor(this.cols / 12);
+    this.startCol = Math.floor(this.cols / 4);
   }
 
   public ngOnInit(): void {
+    this.setBoardSize();
     this.generateBoard();
   }
 
@@ -67,19 +72,20 @@ export class AppComponent {
     this.board = this.create2DArray(this.rows, this.cols);
     for (let i = 0; i < this.rows; i++) {
       for (let j = 0; j < this.cols; j++) {
-        this.board[i][j] = new Tile(TileType.default);
+        this.board[i][j] = new Tile(i, j, TileType.default);
 
         // Placing the start and target nodes
-        if (i == this.startRow && j == this.startCol * 2) {
+        if (i == this.startRow && j == this.startCol * 1) {
           this.board[i][j].type = TileType.start;
         }
-        if (i == this.startRow && j == this.startCol * 10) {
+        if (i == this.startRow && j == this.startCol * 3) {
           this.board[i][j].type = TileType.target;
         }
       }
     }
   }
 
+  // Creates a 2D Array that is later populated with Tile objects
   private create2DArray(rows: number, cols: number): Array<Array<Tile>> {
     const arr = new Array(rows);
     for (let i = 0; i < arr.length; i++) {
@@ -125,6 +131,7 @@ export class AppComponent {
     this.removeTargetNodeOnDrag(col);
   }
 
+  // Removes all the walls from the board
   public clearWalls(): void {
     this.board.forEach((row: Array<Tile>) => {
       row.forEach((col: Tile) => {
@@ -201,6 +208,122 @@ export class AppComponent {
       col.type = TileType.wall;
     } else if (col.type === TileType.wall) {
       col.type = TileType.default;
+    }
+  }
+
+  public start(): void {
+    this.targetFound = false;
+    this.searchAnimation(this.getStartNode());
+  }
+
+  // Recursive function to visualize the algorithm
+  private searchAnimation(currentNode: Tile) {
+    setTimeout(() => {
+      // Visit the start node
+      if (currentNode.type === TileType.start)
+        currentNode.state = TileState.visited;
+
+      // Visit the target node when found
+      if (this.targetFound) this.getTargetNode().state = TileState.visited;
+
+      // search up
+      if (currentNode.i - 1 >= 0) {
+        this.checkForTarget(this.board[currentNode.i - 1][currentNode.j]);
+
+        if (
+          this.targetFound === false &&
+          this.board[currentNode.i - 1][currentNode.j].state ===
+            TileState.unvisited &&
+          this.board[currentNode.i - 1][currentNode.j].type !== TileType.wall
+        ) {
+          const nextNode = this.board[currentNode.i - 1][currentNode.j];
+          nextNode.state = TileState.visited;
+          this.searchAnimation(nextNode);
+        }
+      }
+
+      // search down
+      if (currentNode.i + 1 < this.rows) {
+        this.checkForTarget(this.board[currentNode.i + 1][currentNode.j]);
+
+        if (
+          this.targetFound === false &&
+          this.board[currentNode.i + 1][currentNode.j].state ===
+            TileState.unvisited &&
+          this.board[currentNode.i + 1][currentNode.j].type !== TileType.wall
+        ) {
+          const nextNode = this.board[currentNode.i + 1][currentNode.j];
+          nextNode.state = TileState.visited;
+          this.searchAnimation(nextNode);
+        }
+      }
+
+      // search left
+      if (currentNode.j - 1 >= 0) {
+        this.checkForTarget(this.board[currentNode.i][currentNode.j - 1]);
+
+        if (
+          this.targetFound === false &&
+          this.board[currentNode.i][currentNode.j - 1].state ===
+            TileState.unvisited &&
+          this.board[currentNode.i][currentNode.j - 1].type !== TileType.wall
+        ) {
+          const nextNode = this.board[currentNode.i][currentNode.j - 1];
+          nextNode.state = TileState.visited;
+          this.searchAnimation(nextNode);
+        }
+      }
+
+      // search right
+      if (currentNode.j + 1 < this.cols) {
+        this.checkForTarget(this.board[currentNode.i][currentNode.j + 1]);
+
+        if (
+          this.targetFound === false &&
+          this.board[currentNode.i][currentNode.j + 1].state ===
+            TileState.unvisited &&
+          this.board[currentNode.i][currentNode.j + 1].type !== TileType.wall
+        ) {
+          const nextNode = this.board[currentNode.i][currentNode.j + 1];
+          nextNode.state = TileState.visited;
+          this.searchAnimation(nextNode);
+        }
+      }
+    }, 200);
+  }
+
+  // Traverse the board in search of the start node an return it when found
+  private getStartNode(): Tile {
+    let node = new Tile(0, 0, TileType.default, document.createElement('div'));
+
+    this.board.forEach((row: Array<Tile>) => {
+      row.forEach((col: Tile) => {
+        if (col.type === TileType.start) {
+          node = col;
+        }
+      });
+    });
+    return node;
+  }
+
+  // Traverse the board in search of the target node an return it when found
+  private getTargetNode(): Tile {
+    let node = new Tile(0, 0, TileType.default, document.createElement('div'));
+
+    this.board.forEach((row: Array<Tile>) => {
+      row.forEach((col: Tile) => {
+        if (col.type === TileType.target) {
+          node = col;
+        }
+      });
+    });
+    return node;
+  }
+
+  // Change the state of targetFound to true if the target node is passed as a parameter
+  private checkForTarget(currentNode: Tile): void {
+    if (currentNode.type === TileType.target) {
+      this.targetFound = true;
     }
   }
 }

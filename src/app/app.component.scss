@@ -1,3 +1,9 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
 @mixin flexCenter {
   display: flex;
   justify-content: center;
@@ -6,6 +12,7 @@
 
 .header__toolbar {
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  margin-bottom: 0;
 }
 
 .spacer {
@@ -26,29 +33,39 @@
   margin: 0 0.5em;
 }
 
-.legend {
-  margin: 2em 0;
-  @include flexCenter();
-  gap: 2em;
-  width: 100%;
-  .item {
-    @include flexCenter();
-    img {
-      margin-right: 0.35em;
-    }
-    p {
-      color: #0e153a;
-      font-size: 16px;
-      font-weight: 400;
-      margin: 0;
-    }
-  }
-}
-
 $tileBorder: #afd8f8;
 
-.board__container {
+.main__wrapper {
+  display: flex;
   @include flexCenter();
+  height: 100%;
+}
+
+.main {
+  display: flex;
+  justify-content: center;
+  gap: 1.5em;
+}
+
+.board__container {
+  width: fit-content;
+  width: 100%;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5em;
+  .card {
+    width: 360px;
+    min-height: 120px;
+    p {
+      font-size: 20px;
+    }
+    h1 {
+      font-size: 48px;
+    }
+  }
 }
 
 .board {
@@ -67,7 +84,7 @@ $tileBorder: #afd8f8;
     min-height: 25px;
     width: 100%;
     .col {
-      background: #fafafa;
+      background: #ffffff;
       user-select: none;
       @include flexCenter();
       width: 25px;
@@ -111,14 +128,12 @@ $tileBorder: #afd8f8;
 }
 
 .start {
-  position: relative;
   &::after {
-    //position: absolute;
+    position: relative;
     z-index: 3;
     content: "";
     width: 18px;
     height: 18px;
-    position: relative;
     background: url(./../assets/nodes/start.svg);
     background-position: center center;
     background-repeat: no-repeat;
@@ -127,16 +142,52 @@ $tileBorder: #afd8f8;
 }
 
 .target {
-  position: relative;
   &::after {
+    position: relative;
+    z-index: 3;
     content: "";
     width: 18px;
     height: 18px;
-    position: absolute;
-    z-index: 3;
     background: url(./../assets/nodes/target.svg);
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
+  }
+}
+
+.visited {
+  position: relative;
+  &::before {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    width: 25px;
+    height: 25px;
+    animation: visitedNodeAnimation 1s ease-in-out forwards;
+  }
+}
+
+@keyframes visitedNodeAnimation {
+  0% {
+    border-radius: 100%;
+    transform: scale(0);
+    background: #3d5af1;
+  }
+  25% {
+    background: #3d5af1;
+  }
+  50% {
+    background: #fdef2d;
+  }
+  75% {
+    border-radius: 0;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0.5;
+    transform: scale(1);
+    background: #40cee3;
   }
 }
