@@ -390,7 +390,12 @@ export class AppComponent {
     this.targetFound = false;
     this.board.forEach((row: Array<Tile>) => {
       row.forEach((col: Tile) => {
-        (col.DOMElement as HTMLElement).style.transform = 'rotate(0deg)';
+        (col.DOMElement as HTMLElement).classList.remove(
+          'rotateminus90',
+          'rotate90',
+          'rotate180',
+          'rotate0'
+        );
         if (col.state === TileState.visited) {
           col.state = TileState.unvisited;
         }
@@ -412,27 +417,36 @@ export class AppComponent {
       if (r) {
         if (r[1] < e[1]) {
           // The arrow is going up
-          (this.board[e[1]][e[0]].DOMElement as HTMLElement).style.transform =
-            'rotate(-90deg)';
-          (this.board[r[1]][r[0]].DOMElement as HTMLElement).style.transform =
-            'rotate(-90deg)';
+          (this.board[e[1]][e[0]].DOMElement as HTMLElement).classList.add(
+            'rotateminus90'
+          );
+          (this.board[r[1]][r[0]].DOMElement as HTMLElement).classList.add(
+            'rotateminus90'
+          );
         } else if (r[1] > e[1]) {
           // The arrow is going down
-          (this.board[e[1]][e[0]].DOMElement as HTMLElement).style.transform =
-            'rotate(90deg)';
-          (this.board[r[1]][r[0]].DOMElement as HTMLElement).style.transform =
-            'rotate(90deg)';
+          (this.board[e[1]][e[0]].DOMElement as HTMLElement).classList.add(
+            'rotate90'
+          );
+          (this.board[r[1]][r[0]].DOMElement as HTMLElement).classList.add(
+            'rotate90'
+          );
         } else if (r[0] < e[0]) {
           // The arrow is going left
-          (this.board[e[1]][e[0]].DOMElement as HTMLElement).style.transform =
-            'rotate(180deg)';
-          (this.board[r[1]][r[0]].DOMElement as HTMLElement).style.transform =
-            'rotate(180deg)';
+          (this.board[e[1]][e[0]].DOMElement as HTMLElement).classList.add(
+            'rotate180'
+          );
+          (this.board[r[1]][r[0]].DOMElement as HTMLElement).classList.add(
+            'rotate180'
+          );
         } else {
-          (this.board[e[1]][e[0]].DOMElement as HTMLElement).style.transform =
-            'rotate(0deg)';
-          (this.board[r[1]][r[0]].DOMElement as HTMLElement).style.transform =
-            'rotate(0deg)';
+          // The arrow is going right
+          (this.board[e[1]][e[0]].DOMElement as HTMLElement).classList.add(
+            'rotate0'
+          );
+          (this.board[r[1]][r[0]].DOMElement as HTMLElement).classList.add(
+            'rotate0'
+          );
         }
       }
 

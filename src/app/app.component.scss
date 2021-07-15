@@ -139,6 +139,18 @@ $tileBorder: #afd8f8;
     background-repeat: no-repeat;
     background-size: cover;
   }
+  &.rotateminus90::after {
+    transform: rotate(-90deg) !important;
+  }
+  &.rotate90::after {
+    transform: rotate(90deg) !important;
+  }
+  &.rotate180::after {
+    transform: rotate(180deg) !important;
+  }
+  &.rotate0::after {
+    transform: rotate(0deg) !important;
+  }
 }
 
 .target {
@@ -220,10 +232,8 @@ $tileBorder: #afd8f8;
 
 // Path to the node animation
 .arrowPath {
-  position: relative;
   &::after {
     z-index: 99;
-    position: absolute;
     content: "";
     width: 18px;
     height: 18px;
@@ -232,7 +242,22 @@ $tileBorder: #afd8f8;
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
-    animation: arrowPathAnim 0.5s forwards;
+  }
+  &.rotateminus90::after {
+    animation: arrowPathAnimUp 0.5s forwards;
+    transform: rotate(-90deg) !important;
+  }
+  &.rotate90::after {
+    animation: arrowPathAnimDown 0.5s forwards;
+    transform: rotate(90deg) !important;
+  }
+  &.rotate180::after {
+    animation: arrowPathAnimLeft 0.5s forwards;
+    transform: rotate(180deg) !important;
+  }
+  &.rotate0::after {
+    animation: arrowPathAnimRight 0.5s forwards;
+    transform: rotate(0deg) !important;
   }
 }
 
@@ -251,5 +276,77 @@ $tileBorder: #afd8f8;
   }
   100% {
     transform: scale(1);
+  }
+}
+
+@keyframes arrowPathAnimUp {
+  0% {
+    transform: scale(0.6) rotate(-90deg);
+  }
+  25% {
+    transform: scale(1.2) rotate(-90deg);
+  }
+  50% {
+    transform: scale(1.4) rotate(-90deg);
+  }
+  75% {
+    transform: scale(1.1) rotate(-90deg);
+  }
+  100% {
+    transform: scale(1) rotate(-90deg);
+  }
+}
+
+@keyframes arrowPathAnimDown {
+  0% {
+    transform: scale(0.6) rotate(90deg);
+  }
+  25% {
+    transform: scale(1.2) rotate(90deg);
+  }
+  50% {
+    transform: scale(1.4) rotate(90deg);
+  }
+  75% {
+    transform: scale(1.1) rotate(90deg);
+  }
+  100% {
+    transform: scale(1) rotate(90deg);
+  }
+}
+
+@keyframes arrowPathAnimLeft {
+  0% {
+    transform: scale(0.6) rotate(180deg);
+  }
+  25% {
+    transform: scale(1.2) rotate(180deg);
+  }
+  50% {
+    transform: scale(1.4) rotate(180deg);
+  }
+  75% {
+    transform: scale(1.1) rotate(180deg);
+  }
+  100% {
+    transform: scale(1) rotate(180deg);
+  }
+}
+
+@keyframes arrowPathAnimRight {
+  0% {
+    transform: scale(0.6) rotate(0deg);
+  }
+  25% {
+    transform: scale(1.2) rotate(0deg);
+  }
+  50% {
+    transform: scale(1.4) rotate(0deg);
+  }
+  75% {
+    transform: scale(1.1) rotate(0deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
   }
 }
