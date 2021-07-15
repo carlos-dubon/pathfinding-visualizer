@@ -267,10 +267,6 @@ export class AppComponent {
     let speed: number = 200;
 
     switch (this.appSpeed) {
-      case 'Slow': {
-        speed = 400;
-        break;
-      }
       case 'Fast': {
         speed = 20;
         break;
@@ -373,6 +369,7 @@ export class AppComponent {
     getTargetNode(this.board).state = TileState.visited;
 
     // Apply dijkstras algorithm to the current board and then send it to animatePath function for path animation
+    // dijkstras returns the shortest path between the start and target nodes
     this.animatePath(dijkstras(this.board));
 
     // Counter that prevents multiple calls to dijkstras function
@@ -384,6 +381,27 @@ export class AppComponent {
     if (currentNode.type === TileType.target) {
       this.targetFound = true;
     }
+  }
+
+  public clearPath(): void {
+    // Reset the counter that prevents multiple calls to the Dijkstra's algorithm
+    this.counter = 0;
+    // When the path is cleared, the algorithm hasn't found the target
+    this.targetFound = false;
+    this.board.forEach((row: Array<Tile>) => {
+      row.forEach((col: Tile) => {
+        (col.DOMElement as HTMLElement).style.transform = 'rotate(0deg)';
+        if (col.state === TileState.visited) {
+          col.state = TileState.unvisited;
+        }
+        if (col.path === true) {
+          col.path = false;
+        }
+        if (col.arrowPath === true) {
+          col.arrowPath = false;
+        }
+      });
+    });
   }
 
   public animatePath(path: Array<Array<number>>): void {
@@ -418,21 +436,29 @@ export class AppComponent {
         }
       }
 
+      let speed: number = 50;
+
+      switch (this.appSpeed) {
+        case 'Fast': {
+          speed = 20;
+          break;
+        }
+        default: {
+          // Normal speed
+          speed = 50;
+          break;
+        }
+      }
+
       setTimeout(() => {
         this.board[e[1]][e[0]].path = true;
-
-        setTimeout(() => {
-          // if (i == path.length - 2) {
-          //   board[r[1]][r[0]].DOMElement.classList.remove("target");
-          // }
-          this.board[e[1]][e[0]].arrowPath = true;
-          if (i != path.length - 1) {
-            setTimeout(() => {
-              this.board[e[1]][e[0]].arrowPath = false;
-            }, 50);
-          }
-        }, 0);
-      }, i * 50);
+        this.board[e[1]][e[0]].arrowPath = true;
+        if (i != path.length - 1) {
+          setTimeout(() => {
+            this.board[e[1]][e[0]].arrowPath = false;
+          }, speed);
+        }
+      }, i * speed);
     }
   }
 }

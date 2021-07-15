@@ -25,7 +25,9 @@
     >
       Clear walls
     </button>
-    <button mat-raised-button class="header__button">Clear path</button>
+    <button mat-raised-button class="header__button" (click)="clearPath()">
+      Clear path
+    </button>
     <span class="spacer"></span>
     <button
       matTooltip="Select the speed of the algorithm"
@@ -35,7 +37,6 @@
       Speed: {{ appSpeed }} <mat-icon>arrow_drop_down</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
-      <button mat-menu-item (click)="setAppSpeed('Slow')">Slow</button>
       <button mat-menu-item (click)="setAppSpeed('Normal')">Normal</button>
       <button mat-menu-item (click)="setAppSpeed('Fast')">Fast</button>
     </mat-menu>

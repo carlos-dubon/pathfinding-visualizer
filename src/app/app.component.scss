@@ -194,15 +194,6 @@ $tileBorder: #afd8f8;
 
 // Yellow path animation
 .path {
-  position: relative;
-  z-index: 55;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 25px;
-  height: 25px;
-  border: none;
-  background: #a0e7f1;
   &::before {
     content: "";
     position: absolute;
@@ -216,13 +207,13 @@ $tileBorder: #afd8f8;
 
 @keyframes pathAnimation {
   0% {
-    transform: scale(0);
-  }
-  75% {
-    transform: scale(1.2);
+    background: rgb(249, 255, 33);
+    box-shadow: inset 0px 0px 0px 4px #ffffff;
+    transform: scale(1);
   }
   100% {
     transform: scale(1);
+    box-shadow: inset 0px 0px 0px 0px #ffffff;
     background: rgb(249, 255, 33);
   }
 }
@@ -241,13 +232,13 @@ $tileBorder: #afd8f8;
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
-    animation: arrowPathAnim 0.4s forwards;
+    animation: arrowPathAnim 0.5s forwards;
   }
 }
 
 @keyframes arrowPathAnim {
   0% {
-    transform: scale(0.7);
+    transform: scale(0.6);
   }
   25% {
     transform: scale(1.2);

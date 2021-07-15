@@ -2,6 +2,7 @@ import { Tile, TileType } from './../models/Tile';
 import { create2DArray, getStartNode, getTargetNode } from './helperFunctions';
 import { Grid, DijkstraFinder } from 'pathfinding';
 
+// Return the shortest path between two nodes
 export default function dijkstras(
   board: Array<Array<Tile>>
 ): Array<Array<number>> {
