@@ -71,7 +71,9 @@
               wall: col.type == 2,
               start: col.type == 3,
               target: col.type == 4,
-              visited: col.state == 1
+              visited: col.state == 1,
+              path: col.path,
+              arrowPath: col.arrowPath
             }"
           ></div>
         </div>
@@ -88,8 +90,11 @@
       </mat-card>
       <mat-card class="card">
         <p>Shortest path</p>
-        <h1>0</h1>
-        <mat-progress-bar mode="determinate" value="0"></mat-progress-bar>
+        <h1>{{ shortestPathLength() }}</h1>
+        <mat-progress-bar
+          mode="determinate"
+          [value]="(shortestPathLength() / (rows * cols)) * 100"
+        ></mat-progress-bar>
       </mat-card>
     </div>
   </div>

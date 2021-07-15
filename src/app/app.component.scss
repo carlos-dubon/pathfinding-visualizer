@@ -191,3 +191,74 @@ $tileBorder: #afd8f8;
     background: #40cee3;
   }
 }
+
+// Yellow path animation
+.path {
+  position: relative;
+  z-index: 55;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 25px;
+  height: 25px;
+  border: none;
+  background: #a0e7f1;
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 25px;
+    height: 25px;
+    animation: pathAnimation 0.4s ease-in forwards;
+  }
+}
+
+@keyframes pathAnimation {
+  0% {
+    transform: scale(0);
+  }
+  75% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    background: rgb(249, 255, 33);
+  }
+}
+
+// Path to the node animation
+.arrowPath {
+  position: relative;
+  &::after {
+    z-index: 99;
+    position: absolute;
+    content: "";
+    width: 18px;
+    height: 18px;
+    position: relative;
+    background: url(./../assets/nodes/start.svg);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    animation: arrowPathAnim 0.4s forwards;
+  }
+}
+
+@keyframes arrowPathAnim {
+  0% {
+    transform: scale(0.7);
+  }
+  25% {
+    transform: scale(1.2);
+  }
+  50% {
+    transform: scale(1.4);
+  }
+  75% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

@@ -1,5 +1,7 @@
 import { Tile, TileState, TileType } from './models/Tile';
 import { Component, ElementRef, ViewChild } from '@angular/core';
+import { getStartNode, getTargetNode } from './algorithms/helperFunctions';
+import dijkstras from './algorithms/Dijkstra';
 
 @Component({
   selector: 'app-root',
@@ -29,6 +31,9 @@ export class AppComponent {
 
   public targetFound: boolean = false;
 
+  // Counter that help preventing multiple function calls
+  public counter: number = 0;
+
   // DOM Board element ref
   @ViewChild('boardEl') boardEl: ElementRef<Element>;
 
@@ -36,8 +41,13 @@ export class AppComponent {
 
   constructor() {}
 
-  public setAppSpeed(speed: string) {
-    this.appSpeed = speed;
+  public ngOnInit(): void {
+    this.setBoardSize();
+    this.generateBoard();
+  }
+
+  public ngAfterViewInit(): void {
+    this.mapDOMElements();
   }
 
   private setBoardSize(): void {
@@ -52,20 +62,8 @@ export class AppComponent {
     this.rows = availableRows;
     this.cols = availableCols;
 
-    // this.rows = 20;
-    //this.cols = 40;
-
     this.startRow = Math.floor(this.rows / 2);
     this.startCol = Math.floor(this.cols / 4);
-  }
-
-  public ngOnInit(): void {
-    this.setBoardSize();
-    this.generateBoard();
-  }
-
-  public ngAfterViewInit(): void {
-    this.mapDOMElements();
   }
 
   // Set the value for the mousedown event
@@ -73,11 +71,16 @@ export class AppComponent {
     this.mouseDown = value;
   }
 
-  // Generates the structure needed for a 2D board
+  public setAppSpeed(speed: string) {
+    this.appSpeed = speed;
+  }
+
+  // Constructs the board
   private generateBoard(): void {
     this.board = this.create2DArray(this.rows, this.cols);
     for (let i = 0; i < this.rows; i++) {
       for (let j = 0; j < this.cols; j++) {
+        // Populate the 2D Array with Tile objects
         this.board[i][j] = new Tile(i, j, TileType.default);
 
         // Placing the start and target nodes
@@ -91,7 +94,7 @@ export class AppComponent {
     }
   }
 
-  // Creates a 2D Array that is later populated with Tile objects
+  // Creates a 2D Array that is later populated with Tile objects (Array<Array<Tile>>)
   private create2DArray(rows: number, cols: number): Array<Array<Tile>> {
     const arr = new Array(rows);
     for (let i = 0; i < arr.length; i++) {
@@ -219,6 +222,17 @@ export class AppComponent {
     return visitedNodes;
   }
 
+  public shortestPathLength(): number {
+    let pathNodes: number = 0;
+    this.board.forEach((row: Array<Tile>) => {
+      row.forEach((col: Tile) => {
+        if (col.path === true) pathNodes++;
+      });
+    });
+
+    return pathNodes;
+  }
+
   // Place or remove walls
   public toggleWall(col: Tile): void {
     if (col.type === TileType.default && col.state === TileState.visited) {
@@ -245,7 +259,7 @@ export class AppComponent {
 
   public start(): void {
     this.targetFound = false;
-    this.searchAnimation(this.getStartNode());
+    this.searchAnimation(getStartNode(this.board));
   }
 
   // Recursive function to visualize the algorithm
@@ -270,19 +284,16 @@ export class AppComponent {
 
     setTimeout(() => {
       // Visit the start node
-      if (currentNode.type === TileType.start) {
+      if (currentNode.type === TileType.start)
         currentNode.state = TileState.visited;
-      }
-
-      // Visit the target node when found
-      if (this.targetFound) {
-        this.getTargetNode().state = TileState.visited;
-      }
 
       // search up
       if (currentNode.i - 1 >= 0) {
         this.checkForTarget(this.board[currentNode.i - 1][currentNode.j]);
-
+        // Visit the target node when found
+        if (this.targetFound && this.counter === 0) {
+          this.targetFoundEvents();
+        }
         if (
           this.targetFound === false &&
           this.board[currentNode.i - 1][currentNode.j].state ===
@@ -299,7 +310,10 @@ export class AppComponent {
       // search down
       if (currentNode.i + 1 < this.rows) {
         this.checkForTarget(this.board[currentNode.i + 1][currentNode.j]);
-
+        // Visit the target node when found
+        if (this.targetFound && this.counter === 0) {
+          this.targetFoundEvents();
+        }
         if (
           this.targetFound === false &&
           this.board[currentNode.i + 1][currentNode.j].state ===
@@ -316,7 +330,10 @@ export class AppComponent {
       // search left
       if (currentNode.j - 1 >= 0) {
         this.checkForTarget(this.board[currentNode.i][currentNode.j - 1]);
-
+        // Visit the target node when found
+        if (this.targetFound && this.counter === 0) {
+          this.targetFoundEvents();
+        }
         if (
           this.targetFound === false &&
           this.board[currentNode.i][currentNode.j - 1].state ===
@@ -333,7 +350,10 @@ export class AppComponent {
       // search right
       if (currentNode.j + 1 < this.cols) {
         this.checkForTarget(this.board[currentNode.i][currentNode.j + 1]);
-
+        // Visit the target node when found
+        if (this.targetFound && this.counter === 0) {
+          this.targetFoundEvents();
+        }
         if (
           this.targetFound === false &&
           this.board[currentNode.i][currentNode.j + 1].state ===
@@ -349,40 +369,70 @@ export class AppComponent {
     }, speed);
   }
 
-  // Traverse the board in search of the start node an return it when found
-  private getStartNode(): Tile {
-    // Node blueprint
-    let node = new Tile(0, 0, TileType.default, document.createElement('div'));
+  private targetFoundEvents(): void {
+    getTargetNode(this.board).state = TileState.visited;
 
-    this.board.forEach((row: Array<Tile>) => {
-      row.forEach((col: Tile) => {
-        if (col.type === TileType.start) {
-          node = col;
-        }
-      });
-    });
-    return node;
-  }
+    // Apply dijkstras algorithm to the current board and then send it to animatePath function for path animation
+    this.animatePath(dijkstras(this.board));
 
-  // Traverse the board in search of the target node an return it when found
-  private getTargetNode(): Tile {
-    // Node blueprint
-    let node = new Tile(0, 0, TileType.default, document.createElement('div'));
-
-    this.board.forEach((row: Array<Tile>) => {
-      row.forEach((col: Tile) => {
-        if (col.type === TileType.target) {
-          node = col;
-        }
-      });
-    });
-    return node;
+    // Counter that prevents multiple calls to dijkstras function
+    this.counter++;
   }
 
   // Change the state of targetFound to true if the target node is passed as a parameter
   private checkForTarget(currentNode: Tile): void {
     if (currentNode.type === TileType.target) {
       this.targetFound = true;
+    }
+  }
+
+  public animatePath(path: Array<Array<number>>): void {
+    for (let i = 0; i < path.length; i++) {
+      const e = path[i];
+      const r = path[i + 1];
+
+      if (r) {
+        if (r[1] < e[1]) {
+          // The arrow is going up
+          (this.board[e[1]][e[0]].DOMElement as HTMLElement).style.transform =
+            'rotate(-90deg)';
+          (this.board[r[1]][r[0]].DOMElement as HTMLElement).style.transform =
+            'rotate(-90deg)';
+        } else if (r[1] > e[1]) {
+          // The arrow is going down
+          (this.board[e[1]][e[0]].DOMElement as HTMLElement).style.transform =
+            'rotate(90deg)';
+          (this.board[r[1]][r[0]].DOMElement as HTMLElement).style.transform =
+            'rotate(90deg)';
+        } else if (r[0] < e[0]) {
+          // The arrow is going left
+          (this.board[e[1]][e[0]].DOMElement as HTMLElement).style.transform =
+            'rotate(180deg)';
+          (this.board[r[1]][r[0]].DOMElement as HTMLElement).style.transform =
+            'rotate(180deg)';
+        } else {
+          (this.board[e[1]][e[0]].DOMElement as HTMLElement).style.transform =
+            'rotate(0deg)';
+          (this.board[r[1]][r[0]].DOMElement as HTMLElement).style.transform =
+            'rotate(0deg)';
+        }
+      }
+
+      setTimeout(() => {
+        this.board[e[1]][e[0]].path = true;
+
+        setTimeout(() => {
+          // if (i == path.length - 2) {
+          //   board[r[1]][r[0]].DOMElement.classList.remove("target");
+          // }
+          this.board[e[1]][e[0]].arrowPath = true;
+          if (i != path.length - 1) {
+            setTimeout(() => {
+              this.board[e[1]][e[0]].arrowPath = false;
+            }, 50);
+          }
+        }, 0);
+      }, i * 50);
     }
   }
 }
