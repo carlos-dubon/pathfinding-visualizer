@@ -16,7 +16,9 @@
     >
       Generate maze
     </button>
-    <button mat-raised-button class="header__button">Clear board</button>
+    <button mat-raised-button class="header__button" (click)="clearBoard()">
+      Clear board
+    </button>
     <button
       [disabled]="!wallsPresent()"
       mat-raised-button

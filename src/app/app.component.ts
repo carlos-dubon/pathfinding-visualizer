@@ -149,6 +149,31 @@ export class AppComponent {
     });
   }
 
+  public clearBoard(): void {
+    this.board.forEach((row: Array<Tile>) => {
+      row.forEach((col: Tile) => {
+        // Remove start and target nodes from the board
+        if (col.type === TileType.start) col.type = TileType.default;
+        if (col.type === TileType.target) col.type = TileType.default;
+      });
+    });
+
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.cols; j++) {
+        // Placing the start and target nodes
+        if (i == this.startRow && j == this.startCol * 1) {
+          this.board[i][j].type = TileType.start;
+        }
+        if (i == this.startRow && j == this.startCol * 3) {
+          this.board[i][j].type = TileType.target;
+        }
+      }
+    }
+
+    this.clearWalls();
+    this.clearPath();
+  }
+
   public removeStartNodeOnDrag(col: Tile) {
     if (col.type === TileType.start && this.mouseDown) {
       // Change the state of the Tile
@@ -259,6 +284,7 @@ export class AppComponent {
 
   public start(): void {
     this.targetFound = false;
+    this.clearPath();
     this.searchAnimation(getStartNode(this.board));
   }
 
