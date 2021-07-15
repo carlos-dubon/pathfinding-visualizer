@@ -32,12 +32,12 @@
       mat-button
       [matMenuTriggerFor]="menu"
     >
-      Speed: Normal <mat-icon>arrow_drop_down</mat-icon>
+      Speed: {{ appSpeed }} <mat-icon>arrow_drop_down</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
-      <button mat-menu-item>Slow</button>
-      <button mat-menu-item>Normal</button>
-      <button mat-menu-item>Fast</button>
+      <button mat-menu-item (click)="setAppSpeed('Slow')">Slow</button>
+      <button mat-menu-item (click)="setAppSpeed('Normal')">Normal</button>
+      <button mat-menu-item (click)="setAppSpeed('Fast')">Fast</button>
     </mat-menu>
     <a href="https://github.com" target="_blank">
       <button mat-button matTooltip="Checkout the GitHub repo">
@@ -80,8 +80,11 @@
     <div class="info">
       <mat-card class="card">
         <p>Visited nodes</p>
-        <h1>0</h1>
-        <mat-progress-bar mode="determinate" value="0"></mat-progress-bar>
+        <h1>{{ visitedNodes() }}</h1>
+        <mat-progress-bar
+          mode="determinate"
+          [value]="(visitedNodes() / (rows * cols)) * 100"
+        ></mat-progress-bar>
       </mat-card>
       <mat-card class="card">
         <p>Shortest path</p>

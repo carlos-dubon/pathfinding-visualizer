@@ -32,7 +32,13 @@ export class AppComponent {
   // DOM Board element ref
   @ViewChild('boardEl') boardEl: ElementRef<Element>;
 
+  public appSpeed: string = 'Normal';
+
   constructor() {}
+
+  public setAppSpeed(speed: string) {
+    this.appSpeed = speed;
+  }
 
   private setBoardSize(): void {
     // Note that the toolbar height and panels width can change
@@ -202,12 +208,38 @@ export class AppComponent {
     return wallsPresent;
   }
 
+  public visitedNodes(): number {
+    let visitedNodes: number = 0;
+    this.board.forEach((row: Array<Tile>) => {
+      row.forEach((col: Tile) => {
+        if (col.state === TileState.visited) visitedNodes++;
+      });
+    });
+
+    return visitedNodes;
+  }
+
   // Place or remove walls
   public toggleWall(col: Tile): void {
-    if (col.type === TileType.default) {
+    if (col.type === TileType.default && col.state === TileState.visited) {
       col.type = TileType.wall;
+      // SetTimeout takes into consideration the CSS Drop animation for walls
+      setTimeout(() => {
+        col.state = TileState.unvisited;
+      }, 250);
+    } else if (
+      col.type === TileType.default &&
+      col.state === TileState.unvisited
+    ) {
+      col.type = TileType.wall;
+      setTimeout(() => {
+        col.state = TileState.unvisited;
+      }, 250);
     } else if (col.type === TileType.wall) {
       col.type = TileType.default;
+      setTimeout(() => {
+        col.state = TileState.unvisited;
+      }, 250);
     }
   }
 
@@ -218,13 +250,34 @@ export class AppComponent {
 
   // Recursive function to visualize the algorithm
   private searchAnimation(currentNode: Tile) {
+    let speed: number = 200;
+
+    switch (this.appSpeed) {
+      case 'Slow': {
+        speed = 400;
+        break;
+      }
+      case 'Fast': {
+        speed = 20;
+        break;
+      }
+      default: {
+        // Normal speed
+        speed = 200;
+        break;
+      }
+    }
+
     setTimeout(() => {
       // Visit the start node
-      if (currentNode.type === TileType.start)
+      if (currentNode.type === TileType.start) {
         currentNode.state = TileState.visited;
+      }
 
       // Visit the target node when found
-      if (this.targetFound) this.getTargetNode().state = TileState.visited;
+      if (this.targetFound) {
+        this.getTargetNode().state = TileState.visited;
+      }
 
       // search up
       if (currentNode.i - 1 >= 0) {
@@ -238,6 +291,7 @@ export class AppComponent {
         ) {
           const nextNode = this.board[currentNode.i - 1][currentNode.j];
           nextNode.state = TileState.visited;
+
           this.searchAnimation(nextNode);
         }
       }
@@ -254,6 +308,7 @@ export class AppComponent {
         ) {
           const nextNode = this.board[currentNode.i + 1][currentNode.j];
           nextNode.state = TileState.visited;
+
           this.searchAnimation(nextNode);
         }
       }
@@ -270,6 +325,7 @@ export class AppComponent {
         ) {
           const nextNode = this.board[currentNode.i][currentNode.j - 1];
           nextNode.state = TileState.visited;
+
           this.searchAnimation(nextNode);
         }
       }
@@ -286,14 +342,16 @@ export class AppComponent {
         ) {
           const nextNode = this.board[currentNode.i][currentNode.j + 1];
           nextNode.state = TileState.visited;
+
           this.searchAnimation(nextNode);
         }
       }
-    }, 200);
+    }, speed);
   }
 
   // Traverse the board in search of the start node an return it when found
   private getStartNode(): Tile {
+    // Node blueprint
     let node = new Tile(0, 0, TileType.default, document.createElement('div'));
 
     this.board.forEach((row: Array<Tile>) => {
@@ -308,6 +366,7 @@ export class AppComponent {
 
   // Traverse the board in search of the target node an return it when found
   private getTargetNode(): Tile {
+    // Node blueprint
     let node = new Tile(0, 0, TileType.default, document.createElement('div'));
 
     this.board.forEach((row: Array<Tile>) => {
