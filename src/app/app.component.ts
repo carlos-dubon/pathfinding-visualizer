@@ -34,6 +34,9 @@ export class AppComponent {
   // Counter that help preventing multiple function calls
   public counter: number = 0;
 
+  public searchAnimationInProgress: boolean = false;
+  public animationIsDone: boolean = false;
+
   // DOM Board element ref
   @ViewChild('boardEl') boardEl: ElementRef<Element>;
 
@@ -84,7 +87,7 @@ export class AppComponent {
         this.board[i][j] = new Tile(i, j, TileType.default);
 
         // Placing the start and target nodes
-        if (i == this.startRow && j == this.startCol * 1) {
+        if (i == this.startRow && j == this.startCol) {
           this.board[i][j].type = TileType.start;
         }
         if (i == this.startRow && j == this.startCol * 3) {
@@ -284,6 +287,8 @@ export class AppComponent {
 
   public start(): void {
     this.targetFound = false;
+    this.searchAnimationInProgress = true;
+    this.animationIsDone = false;
     this.clearPath();
     this.searchAnimation(getStartNode(this.board));
   }
@@ -414,6 +419,7 @@ export class AppComponent {
     this.counter = 0;
     // When the path is cleared, the algorithm hasn't found the target
     this.targetFound = false;
+    this.animationIsDone = false;
     this.board.forEach((row: Array<Tile>) => {
       row.forEach((col: Tile) => {
         (col.DOMElement as HTMLElement).classList.remove(
@@ -497,8 +503,34 @@ export class AppComponent {
           setTimeout(() => {
             this.board[e[1]][e[0]].arrowPath = false;
           }, speed);
+        } else {
+          this.animationIsDone = true;
+          this.searchAnimationInProgress = false;
         }
       }, i * speed);
+    }
+  }
+
+  public nodesAreAtStartPosition(): boolean {
+    const currentStartNodei = getStartNode(this.board).i;
+    const currentStartNodej = getStartNode(this.board).j;
+    const currentTargetNodei = getTargetNode(this.board).i;
+    const currentTargetNodej = getTargetNode(this.board).j;
+
+    const originalStartNodei = this.startRow;
+    const originalStartNodej = this.startCol;
+    const originalTargetNodei = this.startRow;
+    const originalTargetNodej = this.startCol * 3;
+
+    if (
+      currentStartNodei == originalStartNodei &&
+      currentStartNodej == originalStartNodej &&
+      currentTargetNodei == originalTargetNodei &&
+      currentTargetNodej == originalTargetNodej
+    ) {
+      return true;
+    } else {
+      return false;
     }
   }
 }

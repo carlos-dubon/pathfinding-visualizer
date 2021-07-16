@@ -350,3 +350,7 @@ $tileBorder: #afd8f8;
     transform: scale(1) rotate(0deg);
   }
 }
+
+.disabled {
+  pointer-events: none;
+}

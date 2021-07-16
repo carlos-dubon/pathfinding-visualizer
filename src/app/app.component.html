@@ -6,6 +6,7 @@
       color="accent"
       class="header__button"
       (click)="start()"
+      [disabled]="searchAnimationInProgress"
     >
       Visualize Dijkstra's!
     </button>
@@ -13,21 +14,35 @@
       mat-raised-button
       class="header__button"
       matTooltip="Uses Prim’s algorithm"
+      [disabled]="searchAnimationInProgress"
     >
       Generate maze
     </button>
-    <button mat-raised-button class="header__button" (click)="clearBoard()">
+    <button
+      mat-raised-button
+      class="header__button"
+      (click)="clearBoard()"
+      [disabled]="
+        searchAnimationInProgress ||
+        (!wallsPresent() && visitedNodes() == 0 && nodesAreAtStartPosition())
+      "
+    >
       Clear board
     </button>
     <button
-      [disabled]="!wallsPresent()"
+      [disabled]="!wallsPresent() || searchAnimationInProgress"
       mat-raised-button
       class="header__button"
       (click)="clearWalls()"
     >
       Clear walls
     </button>
-    <button mat-raised-button class="header__button" (click)="clearPath()">
+    <button
+      mat-raised-button
+      class="header__button"
+      (click)="clearPath()"
+      [disabled]="searchAnimationInProgress || animationIsDone == false"
+    >
       Clear path
     </button>
     <span class="spacer"></span>
@@ -35,6 +50,7 @@
       matTooltip="Select the speed of the algorithm"
       mat-button
       [matMenuTriggerFor]="menu"
+      [disabled]="searchAnimationInProgress"
     >
       Speed: {{ appSpeed }} <mat-icon>arrow_drop_down</mat-icon>
     </button>
@@ -62,6 +78,7 @@
         class="board"
         (mousedown)="setMouseDownValue(true)"
         (mouseup)="setMouseDownValue(false)"
+        [ngClass]="{ disabled: searchAnimationInProgress }"
       >
         <div class="row" *ngFor="let row of board; let i = index">
           <div
@@ -98,6 +115,13 @@
           mode="determinate"
           [value]="(shortestPathLength() / (rows * cols)) * 100"
         ></mat-progress-bar>
+      </mat-card>
+      <mat-card>
+        Animation is done:
+        {{ animationIsDone | json }}
+        <br />
+        Search in progress:
+        {{ searchAnimationInProgress | json }}
       </mat-card>
     </div>
   </div>
