@@ -1,3 +1,4 @@
+import { generate } from './algorithms/prim';
 import { Tile, TileState, TileType } from './models/Tile';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { getStartNode, getTargetNode } from './algorithms/helperFunctions';
@@ -549,6 +550,49 @@ export class AppComponent {
       return true;
     } else {
       return false;
+    }
+  }
+
+  public generateMaze(): void {
+    this.clearPath();
+    this.clearWalls();
+    this.searchAnimationInProgress = true;
+
+    const randomMaze: Array<Array<number>> = generate({
+      width: this.cols,
+      height: this.rows,
+    });
+
+    let speed: number = 30;
+
+    switch (this.appSpeed) {
+      case 'Fast': {
+        speed = 10;
+        break;
+      }
+      default: {
+        // Normal speed
+        speed = 30;
+        break;
+      }
+    }
+
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.cols; j++) {
+        setTimeout(() => {
+          if (
+            randomMaze[i][j] === 1 &&
+            this.board[i][j].type !== TileType.start &&
+            this.board[i][j].type !== TileType.target
+          ) {
+            this.board[i][j].type = TileType.wall;
+          }
+
+          if (i == this.rows - 1 && j == this.cols - 1) {
+            this.searchAnimationInProgress = false;
+          }
+        }, j * speed);
+      }
     }
   }
 }

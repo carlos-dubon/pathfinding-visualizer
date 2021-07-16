@@ -13,7 +13,8 @@
     <button
       mat-raised-button
       class="header__button"
-      matTooltip="Uses Prim’s algorithm"
+      matTooltip="Generate a random maze with Prim's algorithm"
+      (click)="generateMaze()"
       [disabled]="searchAnimationInProgress"
     >
       Generate maze
