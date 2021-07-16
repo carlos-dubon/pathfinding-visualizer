@@ -206,6 +206,7 @@ $tileBorder: #afd8f8;
 
 // Yellow path animation
 .path {
+  position: relative;
   &::before {
     content: "";
     position: absolute;

@@ -1,7 +1,7 @@
 import { Tile, TileState, TileType } from './models/Tile';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { getStartNode, getTargetNode } from './algorithms/helperFunctions';
-import dijkstras from './algorithms/Dijkstra';
+import dijkstras from './algorithms/dijkstra';
 
 @Component({
   selector: 'app-root',
@@ -145,6 +145,10 @@ export class AppComponent {
 
   // Removes all the walls from the board
   public clearWalls(): void {
+    if (this.animationIsDone) {
+      this.clearPath();
+    }
+
     this.board.forEach((row: Array<Tile>) => {
       row.forEach((col: Tile) => {
         if (col.type === TileType.wall) col.type = TileType.default;
@@ -203,6 +207,10 @@ export class AppComponent {
   }
 
   public removeTargetNodeOnDrag(col: Tile) {
+    if (this.animationIsDone && this.mouseDown) {
+      col.arrowPath = false;
+    }
+
     if (col.type === TileType.target && this.mouseDown) {
       // Change the state of the Tile
       col.type = TileType.default;
@@ -211,6 +219,12 @@ export class AppComponent {
   }
 
   public addTargetNodeOnDrag(col: Tile) {
+    if (this.animationIsDone && this.mouseDown && this.targetNodeSelected) {
+      this.clearPath();
+      //col.arrowPath = true;
+      this.animationIsDone = false;
+    }
+
     if (this.mouseDown && this.targetNodeSelected) {
       if (col.type === TileType.default) {
         col.type = TileType.target;
@@ -263,6 +277,10 @@ export class AppComponent {
 
   // Place or remove walls
   public toggleWall(col: Tile): void {
+    if (this.animationIsDone) {
+      this.clearPath();
+    }
+
     if (col.type === TileType.default && col.state === TileState.visited) {
       col.type = TileType.wall;
       // SetTimeout takes into consideration the CSS Drop animation for walls

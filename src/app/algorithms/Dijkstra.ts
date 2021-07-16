@@ -1,4 +1,4 @@
-import { Tile, TileType } from './../models/Tile';
+import { Tile, TileType } from '../models/Tile';
 import { create2DArray, getStartNode, getTargetNode } from './helperFunctions';
 import { Grid, DijkstraFinder } from 'pathfinding';
 
