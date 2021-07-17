@@ -6,16 +6,16 @@
       color="accent"
       class="header__button"
       (click)="start()"
-      [disabled]="searchAnimationInProgress"
+      [disabled]="searchAnimationInProgress && !searchAnimationIsDone()"
     >
       Visualize Dijkstra's!
     </button>
     <button
       mat-raised-button
       class="header__button"
-      matTooltip="Generate a random maze with Prim's algorithm"
+      matTooltip="Generate a random maze using Prim's algorithm"
       (click)="generateMaze()"
-      [disabled]="searchAnimationInProgress"
+      [disabled]="searchAnimationInProgress && !searchAnimationIsDone()"
     >
       Generate maze
     </button>
@@ -24,14 +24,17 @@
       class="header__button"
       (click)="clearBoard()"
       [disabled]="
-        searchAnimationInProgress ||
+        (searchAnimationInProgress && !searchAnimationIsDone()) ||
         (!wallsPresent() && visitedNodes() == 0 && nodesAreAtStartPosition())
       "
     >
       Clear board
     </button>
     <button
-      [disabled]="!wallsPresent() || searchAnimationInProgress"
+      [disabled]="
+        !wallsPresent() ||
+        (searchAnimationInProgress && !searchAnimationIsDone())
+      "
       mat-raised-button
       class="header__button"
       (click)="clearWalls()"
@@ -42,7 +45,11 @@
       mat-raised-button
       class="header__button"
       (click)="clearPath()"
-      [disabled]="searchAnimationInProgress || animationIsDone == false"
+      [disabled]="
+        (searchAnimationInProgress && !searchAnimationIsDone()) ||
+        animationIsDone == false ||
+        visitedNodes() == 0
+      "
     >
       Clear path
     </button>
@@ -51,7 +58,7 @@
       matTooltip="Select the speed of the algorithm"
       mat-button
       [matMenuTriggerFor]="menu"
-      [disabled]="searchAnimationInProgress"
+      [disabled]="searchAnimationInProgress && !searchAnimationIsDone()"
     >
       Speed: {{ appSpeed }} <mat-icon>arrow_drop_down</mat-icon>
     </button>
@@ -79,7 +86,9 @@
         class="board"
         (mousedown)="setMouseDownValue(true)"
         (mouseup)="setMouseDownValue(false)"
-        [ngClass]="{ disabled: searchAnimationInProgress }"
+        [ngClass]="{
+          disabled: searchAnimationInProgress && !searchAnimationIsDone()
+        }"
       >
         <div class="row" *ngFor="let row of board; let i = index">
           <div
@@ -123,6 +132,8 @@
         <br />
         Search in progress:
         {{ searchAnimationInProgress | json }}
+        <br />
+        algoisdone: {{ searchAnimationIsDone() }}
       </mat-card>
     </div>
   </div>

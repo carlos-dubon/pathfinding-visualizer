@@ -35,6 +35,9 @@ export class AppComponent {
   // Counter that help preventing multiple function calls
   public counter: number = 0;
 
+  // Counter to keep track of when searchAnimation() recursive function is finished
+  public counter2: number = 0;
+
   public searchAnimationInProgress: boolean = false;
   public animationIsDone: boolean = false;
 
@@ -309,6 +312,8 @@ export class AppComponent {
     this.searchAnimationInProgress = true;
     this.animationIsDone = false;
     this.clearPath();
+    this.counter2 = 0;
+    this.counter2++;
     this.searchAnimation(getStartNode(this.board));
   }
 
@@ -348,7 +353,7 @@ export class AppComponent {
         ) {
           const nextNode = this.board[currentNode.i - 1][currentNode.j];
           nextNode.state = TileState.visited;
-
+          this.counter2++;
           this.searchAnimation(nextNode);
         }
       }
@@ -368,7 +373,7 @@ export class AppComponent {
         ) {
           const nextNode = this.board[currentNode.i + 1][currentNode.j];
           nextNode.state = TileState.visited;
-
+          this.counter2++;
           this.searchAnimation(nextNode);
         }
       }
@@ -388,7 +393,7 @@ export class AppComponent {
         ) {
           const nextNode = this.board[currentNode.i][currentNode.j - 1];
           nextNode.state = TileState.visited;
-
+          this.counter2++;
           this.searchAnimation(nextNode);
         }
       }
@@ -408,11 +413,24 @@ export class AppComponent {
         ) {
           const nextNode = this.board[currentNode.i][currentNode.j + 1];
           nextNode.state = TileState.visited;
-
+          this.counter2++;
           this.searchAnimation(nextNode);
         }
       }
+      this.counter2--;
     }, speed);
+  }
+
+  // Returns true if searchAnimation() is done without reaching the target
+  public searchAnimationIsDone(): boolean {
+    if (this.counter2 == 0 && !this.targetFound) {
+      // The algorithm is done
+      this.animationIsDone = true;
+      return true;
+    } else {
+      // The algorithm is not done yet
+      return false;
+    }
   }
 
   private targetFoundEvents(): void {
@@ -439,6 +457,7 @@ export class AppComponent {
     // When the path is cleared, the algorithm hasn't found the target
     this.targetFound = false;
     this.animationIsDone = false;
+    this.counter2 = 0;
     this.board.forEach((row: Array<Tile>) => {
       row.forEach((col: Tile) => {
         (col.DOMElement as HTMLElement).classList.remove(
@@ -557,6 +576,7 @@ export class AppComponent {
     this.clearPath();
     this.clearWalls();
     this.searchAnimationInProgress = true;
+    this.counter2++;
 
     const randomMaze: Array<Array<number>> = generate({
       width: this.cols,
@@ -590,6 +610,7 @@ export class AppComponent {
 
           if (i == this.rows - 1 && j == this.cols - 1) {
             this.searchAnimationInProgress = false;
+            this.counter2--;
           }
         }, j * speed);
       }
