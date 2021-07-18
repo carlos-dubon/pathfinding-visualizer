@@ -13,7 +13,7 @@
     <button
       mat-raised-button
       class="header__button"
-      matTooltip="Generate a random maze using Prim's algorithm"
+      matTooltip="Uses Prim's algorithm"
       (click)="generateMaze()"
       [disabled]="searchAnimationInProgress && !searchAnimationIsDone()"
     >
@@ -126,14 +126,14 @@
           [value]="(shortestPathLength() / (rows * cols)) * 100"
         ></mat-progress-bar>
       </mat-card>
-      <mat-card>
-        Animation is done:
-        {{ animationIsDone | json }}
-        <br />
-        Search in progress:
-        {{ searchAnimationInProgress | json }}
-        <br />
-        algoisdone: {{ searchAnimationIsDone() }}
+      <mat-card class="card">
+        <h2>Dijkstra's Algorithm</h2>
+        <p class="description">
+          Dijkstra's algorithm is an algorithm for finding the shortest paths
+          between nodes in a graph, which may represent, for example, road
+          networks. It was conceived by computer scientist Edsger W. Dijkstra in
+          1956 and published three years later.
+        </p>
       </mat-card>
     </div>
   </div>
