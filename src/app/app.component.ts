@@ -3,6 +3,7 @@ import { Tile, TileState, TileType } from './models/Tile';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { getStartNode, getTargetNode } from './algorithms/helperFunctions';
 import dijkstras from './algorithms/dijkstra';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-root',
@@ -32,11 +33,14 @@ export class AppComponent {
 
   public targetFound: boolean = false;
 
-  // Counter that help preventing multiple function calls
+  // Counter that prevents multiple function calls
   public counter: number = 0;
 
-  // Counter to keep track of when searchAnimation() recursive function is finished
+  // Counter to control of when searchAnimation() is no longer calling itself
   public counter2: number = 0;
+
+  // Counter that prevents multiple function calls
+  public counter3: number = 0;
 
   public searchAnimationInProgress: boolean = false;
   public animationIsDone: boolean = false;
@@ -46,7 +50,7 @@ export class AppComponent {
 
   public appSpeed: string = 'Normal';
 
-  constructor() {}
+  constructor(private _snackBar: MatSnackBar) {}
 
   public ngOnInit(): void {
     this.setBoardSize();
@@ -313,6 +317,7 @@ export class AppComponent {
     this.animationIsDone = false;
     this.clearPath();
     this.counter2 = 0;
+    this.counter3 = 0;
     this.counter2++;
     this.searchAnimation(getStartNode(this.board));
   }
@@ -426,6 +431,7 @@ export class AppComponent {
     if (this.counter2 == 0 && !this.targetFound) {
       // The algorithm is done
       this.animationIsDone = true;
+      this.targetIsUnreachableMsg();
       return true;
     } else {
       // The algorithm is not done yet
@@ -546,6 +552,19 @@ export class AppComponent {
           this.searchAnimationInProgress = false;
         }
       }, i * speed);
+    }
+  }
+
+  public targetIsUnreachableMsg(): void {
+    this.counter3++;
+    if (this.counter3 == 1) {
+      this._snackBar.open(
+        '🚨 Oops! There is no path to the target node.',
+        'Close',
+        {
+          duration: 6000,
+        }
+      );
     }
   }
 

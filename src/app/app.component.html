@@ -47,7 +47,7 @@
       (click)="clearPath()"
       [disabled]="
         (searchAnimationInProgress && !searchAnimationIsDone()) ||
-        animationIsDone == false ||
+        !animationIsDone ||
         visitedNodes() == 0
       "
     >
@@ -79,7 +79,7 @@
   </mat-toolbar>
 </p>
 <div class="main__wrapper">
-  <div class="main">
+  <div class="main" [ngsReveal]="{ delay: 0 }">
     <mat-card class="board__container">
       <div
         #boardEl
@@ -110,7 +110,7 @@
       </div>
     </mat-card>
     <div class="info">
-      <mat-card class="card">
+      <mat-card class="card" [ngsReveal]="{ delay: 200 }">
         <p>Visited nodes</p>
         <h1>{{ visitedNodes() }}</h1>
         <mat-progress-bar
@@ -118,7 +118,7 @@
           [value]="(visitedNodes() / (rows * cols)) * 100"
         ></mat-progress-bar>
       </mat-card>
-      <mat-card class="card">
+      <mat-card class="card" [ngsReveal]="{ delay: 400 }">
         <p>Shortest path</p>
         <h1>{{ shortestPathLength() }}</h1>
         <mat-progress-bar
@@ -126,7 +126,7 @@
           [value]="(shortestPathLength() / (rows * cols)) * 100"
         ></mat-progress-bar>
       </mat-card>
-      <mat-card class="card">
+      <mat-card class="card" [ngsReveal]="{ delay: 600 }">
         <h2>Dijkstra's Algorithm</h2>
         <p class="description">
           Dijkstra's algorithm is an algorithm for finding the shortest paths
