@@ -9,6 +9,7 @@
         <h1>Pathfinding Visualizer</h1>
         <h3>Carlos Dubón</h3>
       </div>
+
       <div
         class="item"
         matRipple
@@ -19,7 +20,7 @@
         }"
       >
         <mat-icon class="item__icon">casino</mat-icon>
-        <p>Generate random maze</p>
+        <p>Generate maze</p>
       </div>
       <div
         class="item"
@@ -65,6 +66,30 @@
       >
         <mat-icon class="item__icon">moving</mat-icon>
         <p>Clear path</p>
+      </div>
+      <div class="category">
+        <div class="subtitle">Speed</div>
+        <mat-radio-group
+          class="radio__buttons"
+          [disabled]="searchAnimationInProgress && !searchAnimationIsDone()"
+        >
+          <mat-radio-button
+            value="normal"
+            class="radio__buttons--text"
+            [checked]="appSpeed == 'Normal'"
+            (click)="setAppSpeed('Normal')"
+            (click)="sidenav.close()"
+            >Normal</mat-radio-button
+          >
+          <mat-radio-button
+            value="fast"
+            class="radio__buttons--text"
+            [checked]="appSpeed == 'Fast'"
+            (click)="setAppSpeed('Fast')"
+            (click)="sidenav.close()"
+            >Fast</mat-radio-button
+          >
+        </mat-radio-group>
       </div>
     </div>
   </mat-drawer>
