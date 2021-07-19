@@ -1,6 +1,11 @@
 <p class="header__toolbar">
   <mat-toolbar color="primary">
-    <span class="header__title">Pathfinding Visualizer</span>
+    <button *ngIf="this.mobile" mat-icon-button>
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span *ngIf="!this.mobile" class="header__title"
+      >Pathfinding Visualizer</span
+    >
     <button
       mat-raised-button
       color="accent"
@@ -11,6 +16,7 @@
       Visualize Dijkstra's!
     </button>
     <button
+      *ngIf="!this.mobile"
       mat-raised-button
       class="header__button"
       matTooltip="Uses Prim's algorithm"
@@ -20,6 +26,7 @@
       Generate maze
     </button>
     <button
+      *ngIf="!this.mobile"
       mat-raised-button
       class="header__button"
       (click)="clearBoard()"
@@ -31,6 +38,7 @@
       Clear board
     </button>
     <button
+      *ngIf="!this.mobile"
       [disabled]="
         !wallsPresent() ||
         (searchAnimationInProgress && !searchAnimationIsDone())
@@ -42,6 +50,7 @@
       Clear walls
     </button>
     <button
+      *ngIf="!this.mobile"
       mat-raised-button
       class="header__button"
       (click)="clearPath()"
@@ -55,6 +64,7 @@
     </button>
     <span class="spacer"></span>
     <button
+      *ngIf="!this.mobile"
       matTooltip="Select the speed of the algorithm"
       mat-button
       [matMenuTriggerFor]="menu"

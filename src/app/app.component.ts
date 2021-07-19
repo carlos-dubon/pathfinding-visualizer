@@ -1,6 +1,6 @@
 import { generate } from './algorithms/prim';
 import { Tile, TileState, TileType } from './models/Tile';
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { getStartNode, getTargetNode } from './algorithms/helperFunctions';
 import dijkstras from './algorithms/dijkstra';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -50,6 +50,13 @@ export class AppComponent {
 
   public appSpeed: string = 'Normal';
 
+  public mobile: boolean = false;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event) {
+    this.updateDesign(window.innerWidth);
+  }
+
   constructor(private _snackBar: MatSnackBar) {}
 
   public ngOnInit(): void {
@@ -59,6 +66,13 @@ export class AppComponent {
 
   public ngAfterViewInit(): void {
     this.mapDOMElements();
+  }
+
+  public updateDesign(width: number): void {
+    // break at 1172px to a mobile version
+    console.log(width);
+    width < 1172 ? (this.mobile = true) : (this.mobile = false);
+    console.log(this.mobile);
   }
 
   private setBoardSize(): void {
