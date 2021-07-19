@@ -7,7 +7,7 @@
           <img src="assets/logo.svg" alt="logo" />
         </div>
         <h1>Pathfinding Visualizer</h1>
-        <h3>Carlos Dubón</h3>
+        <h3>Find the shortest path between two points</h3>
       </div>
 
       <div
@@ -96,7 +96,11 @@
   <mat-drawer-content class="main__app--wrapper">
     <p class="header__toolbar">
       <mat-toolbar color="primary">
-        <button *ngIf="this.mobile" mat-icon-button (click)="sidenav.toggle()">
+        <button
+          *ngIf="this.mobile"
+          mat-icon-button
+          (click)="sidenav.toggle()"
+        >
           <mat-icon>menu</mat-icon>
         </button>
         <span *ngIf="!this.mobile" class="header__title"
