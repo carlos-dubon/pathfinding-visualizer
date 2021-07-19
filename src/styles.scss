@@ -18,3 +18,21 @@ a {
 * {
   box-sizing: border-box;
 }
+
+.mat--drawer__container {
+  overflow-y: visible !important;
+  overflow-x: hidden !important;
+  height: 100% !important;
+}
+
+.main__app--wrapper {
+  overflow-y: visible !important;
+  overflow-x: hidden !important;
+}
+
+.app__sidenav {
+  width: 295px;
+  @media (max-width: 368px) {
+    width: 80%;
+  }
+}

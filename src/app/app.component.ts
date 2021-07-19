@@ -55,12 +55,17 @@ export class AppComponent {
   @HostListener('window:resize', ['$event'])
   onResize(event: Event) {
     this.updateDesign(window.innerWidth);
+    this.ngOnInit();
+    setTimeout(() => {
+      // Fires when the stack is empty so setTimeout() acts as a "when DOM ready" function
+      this.ngAfterViewInit();
+    });
   }
 
   constructor(private _snackBar: MatSnackBar) {}
 
   public ngOnInit(): void {
-    this.setBoardSize();
+    this.updateDesign(window.innerWidth);
     this.generateBoard();
   }
 
@@ -70,20 +75,21 @@ export class AppComponent {
 
   public updateDesign(width: number): void {
     // break at 1172px to a mobile version
-    console.log(width);
     width < 1172 ? (this.mobile = true) : (this.mobile = false);
-    console.log(this.mobile);
+
+    this.mobile ? this.setBoardSize(0) : this.setBoardSize(410);
   }
 
-  private setBoardSize(): void {
+  private setBoardSize(informationPanel: number): void {
     // Note that the toolbar height and panels width can change
-    const toolbarHeight: number = 90;
-    const informationPanel: number = 410;
+    const toolbarHeight: number = 80;
+
     const windowHeight: number = window.innerHeight - toolbarHeight;
     const windowWidth: number = window.innerWidth - informationPanel;
 
     const availableRows = Math.floor(windowHeight / 25) - 2;
     const availableCols = Math.floor(windowWidth / 25) - 2;
+
     this.rows = availableRows;
     this.cols = availableCols;
 
