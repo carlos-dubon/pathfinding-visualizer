@@ -1,7 +1,73 @@
 <mat-drawer-container hasBackdrop="true" class="mat--drawer__container">
-  <mat-drawer #sidenav mode="push" class="app__sidenav"
-    >I'm a drawer</mat-drawer
-  >
+  <mat-drawer #sidenav mode="push" class="app__sidenav">
+    <div class="sidebar__menu">
+      <div class="color__header"></div>
+      <div class="heading">
+        <div class="logo">
+          <img src="assets/logo.svg" alt="logo" />
+        </div>
+        <h1>Pathfinding Visualizer</h1>
+        <h3>Carlos Dubón</h3>
+      </div>
+      <div
+        class="item"
+        matRipple
+        (click)="generateMaze()"
+        (click)="sidenav.close()"
+        [ngClass]="{
+          disabled: searchAnimationInProgress && !searchAnimationIsDone()
+        }"
+      >
+        <mat-icon class="item__icon">casino</mat-icon>
+        <p>Generate random maze</p>
+      </div>
+      <div
+        class="item"
+        matRipple
+        (click)="clearBoard()"
+        (click)="sidenav.close()"
+        [ngClass]="{
+          disabled:
+            (searchAnimationInProgress && !searchAnimationIsDone()) ||
+            (!wallsPresent() &&
+              visitedNodes() == 0 &&
+              nodesAreAtStartPosition())
+        }"
+      >
+        <mat-icon class="item__icon">clear</mat-icon>
+        <p>Clear board</p>
+      </div>
+      <div
+        class="item"
+        matRipple
+        (click)="clearWalls()"
+        (click)="sidenav.close()"
+        [ngClass]="{
+          disabled:
+            !wallsPresent() ||
+            (searchAnimationInProgress && !searchAnimationIsDone())
+        }"
+      >
+        <mat-icon class="item__icon">grid_view</mat-icon>
+        <p>Clear walls</p>
+      </div>
+      <div
+        class="item"
+        matRipple
+        (click)="clearPath()"
+        (click)="sidenav.close()"
+        [ngClass]="{
+          disabled:
+            (searchAnimationInProgress && !searchAnimationIsDone()) ||
+            !animationIsDone ||
+            visitedNodes() == 0
+        }"
+      >
+        <mat-icon class="item__icon">moving</mat-icon>
+        <p>Clear path</p>
+      </div>
+    </div>
+  </mat-drawer>
   <mat-drawer-content class="main__app--wrapper">
     <p class="header__toolbar">
       <mat-toolbar color="primary">
