@@ -1,22 +1,22 @@
 # Pathfinding Visualizer
 
-<center>
+<p align="center">
 <img src="src/assets/logo.svg" alt="Logo" width="100" height="100">
-</center>
-<center>Technology stack used:</center>
+</p>
+<p align="center">Technology stack used:</p>
 
-<center>
+<p align="center">
 <img src="https://img.shields.io/badge/Angular-DD0031?style=flat&logo=angular&logoColor=white" alt="Angular">
 <img src="https://img.shields.io/badge/Angular Material-F7A225?style=flat&logo=angular&logoColor=white" alt="Angular Material">
 <img src="https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white" alt="TypeScript">
 <img src="https://img.shields.io/badge/Sass-CC6699?style=flat&logo=sass&logoColor=white" alt="Sass">
 <img src="https://img.shields.io/badge/GitHub Pages-100000?style=flat&logo=github&logoColor=white" alt="GitHub Pages">
-</center>
+</p>
 
-<center>
+<p align="center">
 <a href="https://carlos-dubon.github.io/pathfinding-visualizer/" target="_blank">https://carlos-dubon.github.io/pathfinding-visualizer/</a>
 </center>
-</br>
+</p>
 
 A visualization tool for **Dijkstra’s pathfinding algorithm** and **Prim’s maze generation algorithm**. Find the shortest path from a source to a destination. This project is based on graph theory.
 
