@@ -87,7 +87,10 @@ export class AppComponent {
     const windowHeight: number = window.innerHeight - toolbarHeight;
     const windowWidth: number = window.innerWidth - informationPanel;
 
-    const availableRows = Math.floor(windowHeight / 25) - 2;
+    let availableRows = Math.floor(windowHeight / 25);
+
+    this.mobile ? (availableRows -= 7) : (availableRows -= 2);
+
     const availableCols = Math.floor(windowWidth / 25) - 2;
 
     this.rows = availableRows;
