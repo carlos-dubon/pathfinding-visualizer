@@ -70,7 +70,10 @@ export class AppComponent {
   }
 
   public ngAfterViewInit(): void {
-    this.mapDOMElements();
+    setTimeout(() => {
+      // Fires when the stack is empty so setTimeout() acts as a "when DOM ready" function
+      this.mapDOMElements();
+    });
   }
 
   public updateDesign(width: number): void {

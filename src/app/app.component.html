@@ -96,14 +96,10 @@
   <mat-drawer-content class="main__app--wrapper">
     <p class="header__toolbar">
       <mat-toolbar color="primary">
-        <button
-          *ngIf="this.mobile"
-          mat-icon-button
-          (click)="sidenav.toggle()"
-        >
+        <button *ngIf="mobile" mat-icon-button (click)="sidenav.toggle()">
           <mat-icon>menu</mat-icon>
         </button>
-        <span *ngIf="!this.mobile" class="header__title"
+        <span *ngIf="!mobile" class="header__title"
           >Pathfinding Visualizer</span
         >
         <button
@@ -116,17 +112,17 @@
           Visualize Dijkstra's!
         </button>
         <button
-          *ngIf="!this.mobile"
+          *ngIf="!mobile"
           mat-raised-button
           class="header__button"
-          matTooltip="Uses Prim's algorithm"
+          matTooltip="Using Prim's algorithm"
           (click)="generateMaze()"
           [disabled]="searchAnimationInProgress && !searchAnimationIsDone()"
         >
           Generate maze
         </button>
         <button
-          *ngIf="!this.mobile"
+          *ngIf="!mobile"
           mat-raised-button
           class="header__button"
           (click)="clearBoard()"
@@ -140,7 +136,7 @@
           Clear board
         </button>
         <button
-          *ngIf="!this.mobile"
+          *ngIf="!mobile"
           [disabled]="
             !wallsPresent() ||
             (searchAnimationInProgress && !searchAnimationIsDone())
@@ -152,7 +148,7 @@
           Clear walls
         </button>
         <button
-          *ngIf="!this.mobile"
+          *ngIf="!mobile"
           mat-raised-button
           class="header__button"
           (click)="clearPath()"
@@ -166,7 +162,7 @@
         </button>
         <span class="spacer"></span>
         <button
-          *ngIf="!this.mobile"
+          *ngIf="!mobile"
           matTooltip="Select the speed of the algorithm"
           mat-button
           [matMenuTriggerFor]="menu"
@@ -188,7 +184,7 @@
               src="https://material.angular.io/assets/img/homepage/github-circle-white-transparent.svg"
               alt="GitHub"
             />
-            <span *ngIf="!this.mobile">GitHub</span>
+            <span *ngIf="!mobile">GitHub</span>
           </button>
         </a>
       </mat-toolbar>
