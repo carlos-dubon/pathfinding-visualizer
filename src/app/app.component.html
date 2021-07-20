@@ -96,7 +96,7 @@
   <mat-drawer-content class="main__app--wrapper">
     <p class="header__toolbar">
       <mat-toolbar color="primary">
-        <button *ngIf="mobile" mat-icon-button (click)="sidenav.toggle()">
+        <button mat-icon-button (click)="sidenav.toggle()">
           <mat-icon>menu</mat-icon>
         </button>
         <span *ngIf="!mobile" class="header__title"
