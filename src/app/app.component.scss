@@ -163,6 +163,7 @@ $tileBorder: #afd8f8;
 }
 
 .start {
+  cursor: grab;
   &::after {
     position: relative;
     z-index: 3;
@@ -189,6 +190,7 @@ $tileBorder: #afd8f8;
 }
 
 .target {
+  cursor: grab;
   &::after {
     position: relative;
     z-index: 3;
@@ -214,6 +216,10 @@ $tileBorder: #afd8f8;
     height: 25px;
     animation: visitedNodeAnimation 1s ease-in-out forwards;
   }
+}
+
+.grabbing {
+  cursor: grabbing;
 }
 
 @keyframes visitedNodeAnimation {

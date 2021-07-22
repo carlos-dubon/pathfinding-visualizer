@@ -214,7 +214,8 @@
                   target: col.type == 4,
                   visited: col.state == 1,
                   path: col.path,
-                  arrowPath: col.arrowPath
+                  arrowPath: col.arrowPath,
+                  grabbing: (col.type == 3 || col.type == 4) && mouseDown
                 }"
               ></div>
             </div>
