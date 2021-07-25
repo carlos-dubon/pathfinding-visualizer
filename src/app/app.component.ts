@@ -572,7 +572,7 @@ export class AppComponent {
         if (i != path.length - 1) {
           setTimeout(() => {
             this.board[e[1]][e[0]].arrowPath = false;
-          }, speed);
+          }, speed - 5);
         } else {
           this.animationIsDone = true;
           this.searchAnimationInProgress = false;

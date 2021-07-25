@@ -163,7 +163,6 @@ $tileBorder: #afd8f8;
 }
 
 .start {
-  cursor: grab;
   &::after {
     position: relative;
     z-index: 3;
@@ -190,7 +189,6 @@ $tileBorder: #afd8f8;
 }
 
 .target {
-  cursor: grab;
   &::after {
     position: relative;
     z-index: 3;
@@ -216,10 +214,6 @@ $tileBorder: #afd8f8;
     height: 25px;
     animation: visitedNodeAnimation 1s ease-in-out forwards;
   }
-}
-
-.grabbing {
-  cursor: grabbing;
 }
 
 @keyframes visitedNodeAnimation {
@@ -463,11 +457,17 @@ $tileBorder: #afd8f8;
     height: 60px;
     padding: 1.2em;
     .item__icon {
+      height: 60px;
+      display: flex;
+      align-items: center;
       margin-right: 32px;
       font-size: 26px;
       color: #666666;
     }
     p {
+      display: flex;
+      align-items: center;
+      height: 60px;
       font-weight: 500;
       color: #000000;
       font-size: 14px;
