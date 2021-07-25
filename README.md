@@ -40,31 +40,39 @@ In practice, Dijkstra’s algorithm is used when we want to save time and fuel t
 
 - ### Drag and drop nodes
     Drag and drop the nodes across the grid.
+
     ![Drag and drop nodes](readme_gifs/1.gif)
 
 - ### Toggle walls
-    Click on the grid to add a wall. Walls are impenetrable, meaning that a path cannot cross through them. 
+    Click on the grid to add a wall. Walls are impenetrable, meaning that a path cannot cross through them.
+
     ![Toggle walls](readme_gifs/2.gif)
 
 - ### Generate random mazes
     Generate random mazes with Prim's algorithm. You are guaranteed to get a path from the source to the target with every maze generated.
+
     ![Generate maze](readme_gifs/3.gif)
 
 - ### Visualize Dijkstra's pathfinding algorithm
     See Dijkstra's pathfinding algorithm in action, and visualize how it gets to find the shortest path between nodes in a graph.
+
     ![Dijkstra's pathfinding algorithm](readme_gifs/4.gif)
 
 - ### Visualize different outcomes
     Move the nodes once the algorithm is done, add or remove walls from the grid. This will allow you to see different paths.
+
     ![Visualize different outcomes](readme_gifs/5.gif)
 
 - ### Get creative!
+  
     ![Get creative](readme_gifs/6.gif)
 
 - ### Change the speed of the algorithm
+  
     ![Speed](readme_gifs/7.gif)
 
 - ### Mobile friendly
+  
     ![Mobile friendly](readme_gifs/8.gif)
 
 I hope you have just as much fun playing around with this visualization tool as I had building it!
